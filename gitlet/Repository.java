@@ -27,11 +27,18 @@ public class Repository {
 
     /* TODO: fill in the rest of this class. */
     public static void init () {
-        GITLET_DIR.mkdir();
-        File staging = new File(".gitlet/staging");
+        boolean success = GITLET_DIR.mkdir();
+        if (!success) {
+            System.out.println("A Gitlet version-control system already exists in the current directory.");
+            return;
+        }
         try {
-            boolean success = staging.createNewFile();
+            File staging = new File(".gitlet/staging");
+            File objects = new File(".gitlet/objects");
+            staging.mkdir();
+            objects.mkdir();
             Commit initial = new Commit();
+            initial.serialize();
         } catch (Exception e) {
             e.printStackTrace();
         }
