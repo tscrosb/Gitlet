@@ -88,4 +88,8 @@ public class Commit implements Serializable {
         return Utils.readObject(mother, Commit.class);
     }
 
+    public String getSha1() {
+        return this.sha1;
+    }
+
 }

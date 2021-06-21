@@ -43,4 +43,8 @@ public class Repository {
             e.printStackTrace();
         }
     }
+
+    public static void add() {
+
+    }
 }
