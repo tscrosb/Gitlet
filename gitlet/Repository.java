@@ -1,31 +1,23 @@
 package gitlet;
 
 import java.io.File;
+import java.util.Arrays;
+
 import static gitlet.Utils.*;
 
-// TODO: any imports you need here
 
 /** Represents a gitlet repository.
- *  TODO: It's a good idea to give a description here of what else this Class
  *  does at a high level.
  *
- *  @author TODO
+ *  @author Thomas Crosbie-Walsh
  */
 public class Repository {
-    /**
-     * TODO: add instance variables here.
-     *
-     * List all instance variables of the Repository class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided two examples for you.
-     */
 
     /** The current working directory. */
     public static final File CWD = new File(System.getProperty("user.dir"));
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
 
-    /* TODO: fill in the rest of this class. */
     public static void init () {
         boolean success = GITLET_DIR.mkdir();
         if (!success) {
@@ -38,13 +30,44 @@ public class Repository {
             staging.mkdir();
             objects.mkdir();
             Commit initial = new Commit();
+            CommitTree commitTree = new CommitTree(initial);
+            commitTree.serialize();
             initial.serialize();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void add() {
+    public static void add(String filename) {
+        File toAdd = new File(filename);
+        if (!toAdd.exists()) {
+            System.out.println("File does not exist.");
+            return;
+        }
+        try {
+            byte[] toAddContents = Utils.readContents(toAdd);
+            CommitTree commitTree = Utils.readObject(new File(".gitlet/objects" + "Tree"), CommitTree.class);
+            Commit headCommit = commitTree.getHeadCommit();
+            if (headCommit.blobExists(filename)) {
+                Blob committed = headCommit.getBlob(filename);
+                byte[] commitContents = committed.getContents();
+                if (Arrays.equals(toAddContents, commitContents)) {
+                    new File(".gitlet/staging" + filename).delete();
+                    return;
+                }
+                if (commitTree.getMarked().contains(filename)) {
+                    commitTree.removeRmMarked(filename);
+                    commitTree.serialize();
+                }
+            }
+            File toStage = new File(".gitlet/staging" + filename);
+            Utils.writeContents(toStage, toAddContents);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void commit(String commit) {
 
     }
 }

@@ -9,19 +9,9 @@ import java.util.*;
 import java.util.List;
 
 /** Represents a gitlet commit object.
- *  TODO: It's a good idea to give a description here of what else this Class
- *  does at a high level.
- *
- *  @author TODO
+ *  @author Thomas Crosbie-Walsh
  */
 public class Commit implements Serializable {
-    /**
-     * TODO: add instance variables here.
-     *
-     * List all instance variables of the Commit class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided one example for `message`.
-     */
 
     /** The message of this Commit. */
     private String message;
@@ -65,10 +55,10 @@ public class Commit implements Serializable {
     }
 
 
-    /* TODO: fill in the rest of this class. */
 
 
-    /* TODO: serialize this commit. */
+
+
     public void serialize () {
         File outFile = new File(".gitlet/objects/" + this.sha1);
         Utils.writeObject(outFile, this);
@@ -91,5 +81,17 @@ public class Commit implements Serializable {
     public String getSha1() {
         return this.sha1;
     }
+
+    public boolean blobExists(String name) {
+        return this.blobHashes.containsKey(name);
+    }
+
+    public Blob getBlob(String name) {
+        String blobSha1 = this.blobHashes.get(name);
+        File file = new File(".gitlet/objects" + blobSha1);
+        return Utils.readObject(file, Blob.class);
+    }
+
+
 
 }
