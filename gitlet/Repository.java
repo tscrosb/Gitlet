@@ -7,8 +7,6 @@ import static gitlet.Utils.*;
 
 
 /** Represents a gitlet repository.
- *  does at a high level.
- *
  *  @author Thomas Crosbie-Walsh
  */
 public class Repository {
@@ -46,13 +44,13 @@ public class Repository {
         }
         try {
             byte[] toAddContents = Utils.readContents(toAdd);
-            CommitTree commitTree = Utils.readObject(new File(".gitlet/objects" + "Tree"), CommitTree.class);
+            CommitTree commitTree = Utils.readObject(new File(".gitlet/objects/" + "CT"), CommitTree.class);
             Commit headCommit = commitTree.getHeadCommit();
             if (headCommit.blobExists(filename)) {
                 Blob committed = headCommit.getBlob(filename);
                 byte[] commitContents = committed.getContents();
                 if (Arrays.equals(toAddContents, commitContents)) {
-                    new File(".gitlet/staging" + filename).delete();
+                    new File(".gitlet/staging/" + filename).delete();
                     return;
                 }
                 if (commitTree.getMarked().contains(filename)) {
@@ -60,7 +58,7 @@ public class Repository {
                     commitTree.serialize();
                 }
             }
-            File toStage = new File(".gitlet/staging" + filename);
+            File toStage = new File(".gitlet/staging/" + filename);
             Utils.writeContents(toStage, toAddContents);
         } catch (Exception e) {
             e.printStackTrace();

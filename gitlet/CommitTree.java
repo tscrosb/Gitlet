@@ -31,13 +31,14 @@ public class CommitTree implements Serializable {
         removed = new ArrayList<>();
     }
 
-    Commit getHeadCommit() {
-        String headsha1 = this.branchMap.get(headBranch);
+    public Commit getHeadCommit() {
+        String headsha1 = this.branchMap.get(this.headBranch);
         File file = new File(".gitlet/objects/" + headsha1);
+        System.out.println(file);
         return Utils.readObject(file, Commit.class);
     }
 
-    Commit getHeadCommit(String branchName) {
+    public Commit getHeadCommit(String branchName) {
         String headsha1 = this.branchMap.get(branchName);
         File file = new File(".gitlet/objects/" + headsha1);
         return Utils.readObject(file, Commit.class);

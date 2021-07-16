@@ -3,6 +3,10 @@ package gitlet;
 import java.io.File;
 import java.io.Serializable;
 
+/** Represents an object that stores the contents of a file.
+ *  @author Thomas Crosbie-Walsh
+ */
+
 public class Blob implements Serializable {
 
     private final String filename;
