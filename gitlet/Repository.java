@@ -1,6 +1,7 @@
 package gitlet;
 
 import java.io.File;
+import java.io.Serial;
 import java.util.Arrays;
 
 import static gitlet.Utils.*;
@@ -16,7 +17,7 @@ public class Repository {
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
 
-    public static void init () {
+    static void init () {
         boolean success = GITLET_DIR.mkdir();
         if (!success) {
             System.out.println("A Gitlet version-control system already exists in the current directory.");
@@ -36,7 +37,7 @@ public class Repository {
         }
     }
 
-    public static void add(String filename) {
+    static void add(String filename) {
         File toAdd = new File(filename);
         if (!toAdd.exists()) {
             System.out.println("File does not exist.");
@@ -45,6 +46,7 @@ public class Repository {
         try {
             byte[] toAddContents = Utils.readContents(toAdd);
             CommitTree commitTree = Utils.readObject(new File(".gitlet/objects/" + "CT"), CommitTree.class);
+            System.out.println(commitTree.getHeadSHA1());
             Commit headCommit = commitTree.getHeadCommit();
             if (headCommit.blobExists(filename)) {
                 Blob committed = headCommit.getBlob(filename);

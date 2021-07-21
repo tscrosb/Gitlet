@@ -1,11 +1,15 @@
 package gitlet;
 
 import java.io.File;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CommitTree implements Serializable {
+
+
+
     private String headBranch;
 
     private ArrayList<String> removed;
@@ -31,14 +35,13 @@ public class CommitTree implements Serializable {
         removed = new ArrayList<>();
     }
 
-    public Commit getHeadCommit() {
+    Commit getHeadCommit() {
         String headsha1 = this.branchMap.get(this.headBranch);
         File file = new File(".gitlet/objects/" + headsha1);
-        System.out.println(file);
         return Utils.readObject(file, Commit.class);
     }
 
-    public Commit getHeadCommit(String branchName) {
+    Commit getHeadCommit(String branchName) {
         String headsha1 = this.branchMap.get(branchName);
         File file = new File(".gitlet/objects/" + headsha1);
         return Utils.readObject(file, Commit.class);
